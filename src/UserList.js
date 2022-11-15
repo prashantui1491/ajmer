@@ -21,13 +21,7 @@ const UserList = () => {
     email: '',
   };
 
-  const [data, setData] = useState([]);
-  const [values, setValues] = useState(initialValue);
-  const [userinfo, setUserinfo] = useState([]);
-  const [theme, setTheme] = useState(false);
-  const [loading, setLoading] = useState(false)
- 
-  const [validations,setValidations] = useState({
+  const initivaValidation = {
     id:{
         error:false,
         errorMessage:'You must enter a Id'
@@ -40,7 +34,14 @@ const UserList = () => {
       error:false,
       errorMessage:'You must enter an email'
     }
-  })
+  }
+  const [data, setData] = useState([]);
+  const [values, setValues] = useState(initialValue);
+  const [userinfo, setUserinfo] = useState([]);
+  const [theme, setTheme] = useState(false);
+  const [loading, setLoading] = useState(false)
+ 
+  const [validations,setValidations] = useState(initivaValidation)
   const fetchApiData = () => {
     setLoading(true)
     fetch('https://reqres.in/api/users')
@@ -60,7 +61,6 @@ const UserList = () => {
   })
   setLoading(false)
   return response.json()
- 
   }
 
   useEffect(() => {
@@ -108,6 +108,7 @@ const UserList = () => {
         setUserinfo([...data, values]);
         setData([...data, values]);
         setValues(initialValue);
+        setValidations(initivaValidation)
         postAPI("https://reqres.in/api/users",values).then(res=>console.log(res))
     }
  
@@ -189,7 +190,7 @@ const UserList = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {loading ? <CircularProgress style={{marginLeft:"200px"}}/> : data.map((user) => (
+              {loading ? <CircularProgress style={{marginLeft:"350px"}}/> : data.map((user) => (
                 <TableRow
                   key={user.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
