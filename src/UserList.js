@@ -149,10 +149,11 @@ const UserList = () => {
 
         <TextField
           id="standard-basic"
-          label="Enter Email"
+          label="Email"
           variant="outlined"
           type="email"
           name="email"
+          labelId="email"
           value={values.email}
           onChange={handleChange}
           required
