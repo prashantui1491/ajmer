@@ -11,6 +11,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const UserList = () => {
   const initialValue = {
@@ -23,7 +24,8 @@ const UserList = () => {
   const [data, setData] = useState([]);
   const [values, setValues] = useState(initialValue);
   const [userinfo, setUserinfo] = useState([]);
-  const [color, setColor] = useState(false);
+  const [theme, setTheme] = useState(false);
+  const [loading, setLoading] = useState(false)
  
   const [validations,setValidations] = useState({
     id:{
@@ -40,12 +42,15 @@ const UserList = () => {
     }
   })
   const fetchApiData = () => {
+    setLoading(true)
     fetch('https://reqres.in/api/users')
       .then((response) => response.json())
       .then((json) => setData(json?.data));
+      setLoading(false)
   };
 
   const postAPI = async(url = '', data = {}) =>{
+    setLoading(true)
   const response = await fetch(url,{
     method:'POST',
     headers:{
@@ -53,7 +58,9 @@ const UserList = () => {
     },
     body:JSON.stringify(values)
   })
+  setLoading(false)
   return response.json()
+ 
   }
 
   useEffect(() => {
@@ -106,12 +113,12 @@ const UserList = () => {
  
   };
 
-  console.log(data);
-  const colorHandler = () => {
-    setColor(!color);
+  //console.log(data);
+  const themeHandler = () => {
+    setTheme(!theme);
   };
   return (
-    <div>
+    <div style={{backgroundColor: theme ? "pink" : "white"}}>
         <Box mt={2}>
         <Box mt={2} sx={{display:"flex", justifyContent:"center"}}>
         <TextField
@@ -165,8 +172,8 @@ const UserList = () => {
         <Button variant="contained" onClick={adduserInfo}>
           Submit
         </Button>
-        <Button variant="contained" onClick={colorHandler}>
-          Color Swap
+        <Button variant="contained" onClick={themeHandler}>
+          Theme Swap
         </Button>
         </Box>
         </Box>
@@ -182,7 +189,7 @@ const UserList = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.map((user) => (
+              {loading ? <CircularProgress style={{marginLeft:"200px"}}/> : data.map((user) => (
                 <TableRow
                   key={user.id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
